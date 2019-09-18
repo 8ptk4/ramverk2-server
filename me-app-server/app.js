@@ -4,6 +4,14 @@ const bodyParser = require("body-parser");
 
 const port = 8080;
 
+// This is middleware called for all routes.
+// Middleware takes three parameters
+app.use((req, res, next) => {
+    console.log(req.method);
+    console.log(req.path);
+    next();
+});
+
 // Add a route
 app.get("/", (req, res) => {
     const data = {
@@ -48,6 +56,8 @@ app.get("/hello/:msg", (req, res) => {
 
     res.json(data);
 });
+
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
