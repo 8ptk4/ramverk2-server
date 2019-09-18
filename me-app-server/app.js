@@ -4,6 +4,13 @@ const bodyParser = require("body-parser");
 
 const port = 8080;
 
+// dont show the log when its test
+if (process.env.NODE_ENV !== 'test') {
+    // use morgan to log at command line
+    app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
+};
+
+/*
 // This is middleware called for all routes.
 // Middleware takes three parameters
 app.use((req, res, next) => {
@@ -11,6 +18,7 @@ app.use((req, res, next) => {
     console.log(req.path);
     next();
 });
+*/
 
 // Add a route
 app.get("/", (req, res) => {
