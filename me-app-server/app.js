@@ -5,11 +5,13 @@ const port = 8080;
 
 // Add a route
 app.get("/", (req, res) => {
-    res.send("Hello World");
-});
+    const data = {
+        data: {
+            msg: "Hello World"
+        }
+    };
 
-app.get("/test", (req, res) => {
-    res.send("Testar lite");
+    res.json(data);
 });
 
 // Start up server
