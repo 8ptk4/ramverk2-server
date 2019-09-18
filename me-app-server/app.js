@@ -2,8 +2,11 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
+const cors = require('cors');
 
 const port = 8080;
+
+app.use(cors());
 
 // dont show the log when its test
 if (process.env.NODE_ENV !== 'test') {
