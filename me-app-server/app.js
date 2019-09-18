@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 
 const port = 8080;
 
@@ -48,5 +49,7 @@ app.get("/hello/:msg", (req, res) => {
     res.json(data);
 });
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 // Start up server
 app.listen(port, () => console.log(`Example API listening on port ${port}!`));
