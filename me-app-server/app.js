@@ -38,5 +38,15 @@ app.delete("/user", (req, res) => {
     res.status(204).send();
 });
 
+app.get("/hello/:msg", (req, res) => {
+    const data = {
+        data: {
+            msg: req.params.msg
+        }
+    };
+
+    res.json(data);
+});
+
 // Start up server
 app.listen(port, () => console.log(`Example API listening on port ${port}!`));
