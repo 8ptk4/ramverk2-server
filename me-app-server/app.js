@@ -4,6 +4,9 @@ const bodyParser = require("body-parser");
 const morgan = require('morgan');
 const cors = require('cors');
 
+const index = require('./routes/index');
+const hello = require('./routes/hello');
+
 const port = 8080;
 
 app.use(cors());
@@ -24,17 +27,7 @@ app.use((req, res, next) => {
 });
 */
 
-// Add a route
-app.get("/", (req, res) => {
-    const data = {
-        data: {
-            msg: "Hello World"
-        }
-    };
-
-    res.json(data);
-});
-
+/*
 app.get("/user", (req, res) => {
     res.json({
         data: {
@@ -59,15 +52,9 @@ app.delete("/user", (req, res) => {
     res.status(204).send();
 });
 
-app.get("/hello/:msg", (req, res) => {
-    const data = {
-        data: {
-            msg: req.params.msg
-        }
-    };
+*/
 
-    res.json(data);
-});
+
 
 app.use((req, res, next) => {
     const err = new Error("Not Found");
@@ -75,7 +62,25 @@ app.use((req, res, next) => {
     next(err);
 });
 
+app.use((err, req, res, next) => {
+    if (res.headersSent) {
+        return next(err);
+    }
 
+    res.status(err.status || 500).json({
+        "errors": [
+            {
+                "status": err.status,
+                "title": err.message,
+                "detail": err.message
+            }
+        ]
+    });
+});
+
+
+app.use('/', index);
+app.use('/hello', hello);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
