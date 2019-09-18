@@ -23,27 +23,19 @@ app.get("/user", (req, res) => {
 });
 
 app.post("/user", (req, res) => {
-    res.json({
+    res.status(201).json({
         data: {
-            msg: "Got a POST request"
+            msg: "Got a POST request, sending back 201 Created"
         }
     });
 });
 
 app.put("/user", (req, res) => {
-    res.json({
-        data: {
-            msg: "Got a PUT request"
-        }
-    });
+    res.status(204).send();
 });
 
 app.delete("/user", (req, res) => {
-    res.json({
-        data: {
-            msg: "Got a DELETE request"
-        }
-    });
+    res.status(204).send();
 });
 
 // Start up server
