@@ -4,10 +4,11 @@ const bodyParser = require("body-parser");
 const morgan = require('morgan');
 const cors = require('cors');
 
-const index = require('./routes/index');
-const hello = require('./routes/hello');
+//const index = require('./routes/index.js');
+//const hello = require('./routes/hello.js');
 
 const port = 8080;
+
 
 app.use(cors());
 
@@ -17,9 +18,10 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
 };
 
+app.use(require('./routes'));
+
 /*
-// This is middleware called for all routes.
-// Middleware takes three parameters
+
 app.use((req, res, next) => {
     console.log(req.method);
     console.log(req.path);
@@ -54,8 +56,6 @@ app.delete("/user", (req, res) => {
 
 */
 
-
-
 app.use((req, res, next) => {
     const err = new Error("Not Found");
     err.status = 404;
@@ -79,10 +79,8 @@ app.use((err, req, res, next) => {
 });
 
 
-app.use('/', index);
-app.use('/hello', hello);
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// Start up server
+
 app.listen(port, () => console.log(`Example API listening on port ${port}!`));
+
