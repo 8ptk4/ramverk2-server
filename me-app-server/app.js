@@ -69,6 +69,12 @@ app.get("/hello/:msg", (req, res) => {
     res.json(data);
 });
 
+app.use((req, res, next) => {
+    const err = new Error("Not Found");
+    err.status = 404;
+    next(err);
+});
+
 
 
 app.use(bodyParser.json());
