@@ -10,9 +10,7 @@ async function insertDb(values) {
         const hash = await bcrypt.hash(values.password, salt);
 
         db.run("INSERT INTO users (username, email, password, birthdate) VALUES (?, ?, ?, ?)",
-            values.username,
-            values.email,
-            hash,
+            values.username, values.email, hash, 
             values.personalNumber, (err) => {
                 if (err) {
                     return "Something went wrong!";
@@ -27,9 +25,42 @@ async function insertDb(values) {
     } 
 };
 
-
 router.post('/register', (req, res) => {
     insertDb(req.body)
+});
+
+router.post('/login', (req, res) => {
+    db.get("SELECT password FROM users WHERE email = ? ", 
+        req.body.email, (err, row) => {
+            if (err) {
+                console.log("Error:", err);
+            } else if (row === undefined) {
+                console.log("No values in row!!")
+            }
+    
+            bcrypt.compare(req.body.password, row.password, function (err, res) {
+                // res innehåller nu true eller false beroende på om det är rätt lösenord.
+                console.log("STÄMMER LÖSENORDEN?????", res)
+            });
+        })
+   /*
+
+       db.run("INSERT INTO users (username, email, password, birthdate) VALUES (?, ?, ?, ?)",
+            values.username, values.email, hash,
+            values.personalNumber, (err) => {
+                if (err) {
+                    return "Something went wrong!";
+                }
+                return "User succefully created";
+            });
+
+    const myPlaintextPassword = 'longandhardP4$$w0rD';
+    const hash = 'superlonghashedpasswordfetchedfromthedatabase';
+
+    bcrypt.compare(myPlaintextPassword, hash, function (err, res) {
+        // res innehåller nu true eller false beroende på om det är rätt lösenord.
+    });
+    */
 });
 
 router.get("/hello/:msg", (req, res, next) => {
