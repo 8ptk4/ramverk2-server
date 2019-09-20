@@ -18,6 +18,9 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
 };
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(require('./routes'));
 
 /*
@@ -77,10 +80,6 @@ app.use((err, req, res, next) => {
         ]
     });
 });
-
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(port, () => console.log(`Example API listening on port ${port}!`));
 
