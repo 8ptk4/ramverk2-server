@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./db/texts.sqlite');
+const jwt = require('jsonwebtoken');
 
 async function insertDb(values) {
     try {
@@ -33,44 +34,27 @@ router.post('/login', (req, res) => {
     db.get("SELECT password FROM users WHERE email = ? ", 
         req.body.email, (err, row) => {
             if (err) {
-                console.log("Error:", err);
+                return err;
             } else if (row === undefined) {
-                console.log("No values in row!!")
+                return "error";
             }
     
-            bcrypt.compare(req.body.password, row.password, function (err, res) {
-                // res innehåller nu true eller false beroende på om det är rätt lösenord.
-                console.log("STÄMMER LÖSENORDEN?????", res)
+            bcrypt.compare(req.body.password, row.password, function(err, encrypted) {
+                if (encrypted) {
+                    const payload = { email: `${req.body.email}` };
+                    const secret = process.env.JWT_SECRET || "hemligakorvmojjar";
+                    
+                    const token = jwt.sign(payload, secret, { expiresIn: '1h' });
+                    
+                    return res.status(200).json({hemlighet: token, username: req.body.email});
+                }
+                return res.status(500).json({ error: 'Bcrypt error' });
             });
         })
-   /*
-
-       db.run("INSERT INTO users (username, email, password, birthdate) VALUES (?, ?, ?, ?)",
-            values.username, values.email, hash,
-            values.personalNumber, (err) => {
-                if (err) {
-                    return "Something went wrong!";
-                }
-                return "User succefully created";
-            });
-
-    const myPlaintextPassword = 'longandhardP4$$w0rD';
-    const hash = 'superlonghashedpasswordfetchedfromthedatabase';
-
-    bcrypt.compare(myPlaintextPassword, hash, function (err, res) {
-        // res innehåller nu true eller false beroende på om det är rätt lösenord.
-    });
-    */
 });
 
-router.get("/hello/:msg", (req, res, next) => {
-    const data = {
-        data: {
-            msg: req.params.msg
-        }
-    };
+router.get("/", (req, res, next) => {
 
-    res.json(data);
 });
 
 
