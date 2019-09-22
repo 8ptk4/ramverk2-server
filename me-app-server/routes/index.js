@@ -28,13 +28,16 @@ async function insertDb(values) {
 
 function checkToken(req, res, next) {
     const token = req.headers['x-access-token'];
+    console.log(token);
+    const secret = "hemligakorvmojjar";
 
-    jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
-        if (!err) {
-            res.status(401).json({ error: "token doesnt exist" });
+    jwt.verify(token, secret, function (err, decoded) {
+        if (err) {
+            return res.status(401).json({ error: "token doesnt exist" });
         } 
 
         next();
+        return undefined;
     });
 }
 
@@ -54,7 +57,7 @@ router.post('/login', (req, res) => {
             bcrypt.compare(req.body.password, row.password, function(err, encrypted) {
                 if (encrypted) {
                     const payload = { email: `${req.body.email}` };
-                    const secret = process.env.JWT_SECRET || "hemligakorvmojjar";
+                    const secret = "hemligakorvmojjar";
                     
                     const token = jwt.sign(payload, secret, { expiresIn: '1h' });
                     
@@ -90,10 +93,9 @@ router.post("/pages/:page",
         req.body.data,
         (err, row) => {
             if (!err) {
-                console.log("worked!");
-                //return res.status(200).json({ about: row.content });
+                return res.status(200).json({ status: "Everything went ok" });
             }
-            //return res.status(200).json({ about: row.data });
+            return res.status(500).json({ error: "Something went wrong" });
         }
     )
 });
