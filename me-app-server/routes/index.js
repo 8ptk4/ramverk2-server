@@ -41,8 +41,21 @@ function checkToken(req, res, next) {
     });
 }
 
+
 router.post('/register', (req, res) => {
     insertDb(req.body)
+});
+
+
+router.get("/", (req, res, next) => {
+    db.get("SELECT content FROM pages WHERE title = 'about'",
+        (err, row) => {
+            if (!err) {
+                return res.status(200).json({ data: row });
+            }
+            //return res.status(200).json({ about: row.data });
+        }
+    )
 });
 
 router.post('/login', (req, res) => {
