@@ -26,6 +26,18 @@ async function insertDb(values) {
     } 
 };
 
+function checkToken(req, res, next) {
+    const token = req.headers['x-access-token'];
+
+    jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
+        if (!err) {
+            res.status(401).json({ error: "token doesnt exist" });
+        } 
+
+        next();
+    });
+}
+
 router.post('/register', (req, res) => {
     insertDb(req.body)
 });
@@ -53,9 +65,69 @@ router.post('/login', (req, res) => {
         })
 });
 
-router.get("/", (req, res, next) => {
-
+router.get("/pages/:page", (req, res, next) => {
+    const page = req.params.page;
+ 
+    db.get("SELECT content FROM pages WHERE title = ?",
+        page,
+        (err, row) => {
+            if (!err) {
+                return res.status(200).json({ about: row.content });
+            }
+            //return res.status(200).json({ about: row.data });
+        }
+    )
 });
+
+router.post("/pages/:page", 
+    (req, res, next) => checkToken(req, res, next), 
+    (req, res) => {
+    
+    const page = req.params.page;
+
+    db.run("INSERT OR REPLACE INTO pages(title, content) VALUES(?, ?)",
+        page, 
+        req.body.data,
+        (err, row) => {
+            if (!err) {
+                console.log("worked!");
+                //return res.status(200).json({ about: row.content });
+            }
+            //return res.status(200).json({ about: row.data });
+        }
+    )
+});
+
+
+/*router.post("/test", (req, res) => {
+    db.run("INSERT OR REPLACE INTO pages(content) WHERE title = ?",
+        page, 
+        (err) => {
+            if (err) {
+                return "Something went wrong!";
+            }
+            return "User succefully created";
+        }
+
+    } catch (e) {
+        console.log("error", e);
+    } finally {
+        console.log("This is done");
+    } 
+});*/
+
+/*
+db.get("SELECT content FROM pages WHERE title = ? ",
+    "about", (err, row) => {
+        if (err) {
+            return err;
+        } else if (row === undefined) {
+            return "error";
+        }
+        return res.status(200).json({ about: req.body });
+    }
+)
+*/
 
 
 module.exports = router;
