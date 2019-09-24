@@ -28,7 +28,6 @@ async function insertDb(values) {
 
 function checkToken(req, res, next) {
     const token = req.headers['x-access-token'];
-    console.log(token);
     const secret = "hemligakorvmojjar";
 
     jwt.verify(token, secret, function (err, decoded) {
@@ -48,10 +47,10 @@ router.post('/register', (req, res) => {
 
 
 router.get("/", (req, res, next) => {
-    db.get("SELECT content FROM pages WHERE title = 'about'",
-        (err, row) => {
+    db.get("SELECT content FROM pages WHERE title = ?",
+        "about", (err, row) => {
             if (!err) {
-                return res.status(200).json({ data: row });
+                return res.status(200).json({ ...row }.content);
             }
             //return res.status(200).json({ about: row.data });
         }
@@ -81,11 +80,12 @@ router.post('/login', (req, res) => {
         })
 });
 
-router.get("/pages/:page", (req, res, next) => {
-    const page = req.params.page;
+router.get("/reports/week/:kmom", (req, res, next) => {
+    const title = req.params.kmom;
+    console.log(title);
  
     db.get("SELECT content FROM pages WHERE title = ?",
-        page,
+        title,
         (err, row) => {
             if (!err) {
                 return res.status(200).json({ about: row.content });
@@ -95,15 +95,13 @@ router.get("/pages/:page", (req, res, next) => {
     )
 });
 
-router.post("/pages/:page", 
+router.post("/reports", 
     (req, res, next) => checkToken(req, res, next), 
     (req, res) => {
-    
-    const page = req.params.page;
 
     db.run("INSERT OR REPLACE INTO pages(title, content) VALUES(?, ?)",
-        page, 
-        req.body.data,
+        req.body.title, 
+        req.body.content,
         (err, row) => {
             if (!err) {
                 return res.status(200).json({ status: "Everything went ok" });
@@ -113,36 +111,16 @@ router.post("/pages/:page",
     )
 });
 
-
-/*router.post("/test", (req, res) => {
-    db.run("INSERT OR REPLACE INTO pages(content) WHERE title = ?",
-        page, 
-        (err) => {
-            if (err) {
-                return "Something went wrong!";
-            }
-            return "User succefully created";
+router.get("/titles", (req, res, next) => {
+    db.all("SELECT title FROM pages",
+        (err, row) => {
+            if (!err) {
+                return res.status(200).json({ items: row });
+            } 
+            return res.status(404).json({ error: "notfound" });
         }
-
-    } catch (e) {
-        console.log("error", e);
-    } finally {
-        console.log("This is done");
-    } 
-});*/
-
-/*
-db.get("SELECT content FROM pages WHERE title = ? ",
-    "about", (err, row) => {
-        if (err) {
-            return err;
-        } else if (row === undefined) {
-            return "error";
-        }
-        return res.status(200).json({ about: req.body });
-    }
-)
-*/
+    )
+});
 
 
 module.exports = router;
