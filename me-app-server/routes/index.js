@@ -1,30 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./db/texts.sqlite');
+
+const db = require("../db/database.js");
+
 const jwt = require('jsonwebtoken');
 
-async function insertDb(values) {
-    try {
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(values.password, salt);
+async function insertDb(values, res) {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(values.password, salt);
 
-        db.run("INSERT INTO users (username, email, password, birthdate) VALUES (?, ?, ?, ?)",
-            values.username, values.email, hash, 
-            values.personalNumber, (err) => {
-                if (err) {
-                    return "Something went wrong!";
-                }
-                return "User succefully created";
-            });
+    db.run("INSERT INTO users (username, email, password, birthdate) VALUES (?, ?, ?, ?)",
+        values.username, values.email, hash, 
+        values.personalNumber, (err, row) => {
+            if (err) {
+                
+                return res.status(401).json({ response: "User couldnt be created" });
+            }
 
-    } catch (e) {
-        console.log("error", e);
-    } finally {
-        console.log("This is done");
-    } 
+            return res.status(201).json({ response: "User created successfully" });
+        });
 };
+
 
 function checkToken(req, res, next) {
     const token = req.headers['x-access-token'];
@@ -38,11 +35,11 @@ function checkToken(req, res, next) {
         next();
         return undefined;
     });
-}
+};
 
 
 router.post('/register', (req, res) => {
-    insertDb(req.body)
+    insertDb(req.body, res)
 });
 
 
@@ -51,8 +48,7 @@ router.get("/", (req, res, next) => {
         "about", (err, row) => {
             if (!err) {
                 return res.status(200).json({ ...row }.content);
-            }
-            //return res.status(200).json({ about: row.data });
+            } 
         }
     )
 });
@@ -82,21 +78,20 @@ router.post('/login', (req, res) => {
 
 router.get("/reports/week/:kmom", (req, res, next) => {
     const title = req.params.kmom;
-    console.log(title);
  
     db.get("SELECT content FROM pages WHERE title = ?",
         title,
         (err, row) => {
-            if (!err) {
-                return res.status(200).json({ about: row.content });
+            if (err) {
+                return res.status(404).json({ error: "Cant find the page" });
             }
-            //return res.status(200).json({ about: row.data });
+            res.status(200).json({ about: row.content });
         }
     )
 });
 
-router.post("/reports", 
-    (req, res, next) => checkToken(req, res, next), 
+
+router.post("/reports", (req, res) => (req, res, next) => checkToken(req, res, next), 
     (req, res) => {
 
     db.run("INSERT OR REPLACE INTO pages(title, content) VALUES(?, ?)",
@@ -105,22 +100,29 @@ router.post("/reports",
         (err, row) => {
             if (!err) {
                 return res.status(200).json({ status: "Everything went ok" });
+            } else if (row.length === 0) {
+                return res.status(500).json({ error: "Something went wrong" });
+
             }
-            return res.status(500).json({ error: "Something went wrong" });
         }
     )
 });
 
 router.get("/titles", (req, res, next) => {
-    db.all("SELECT title FROM pages",
-        (err, row) => {
-            if (!err) {
-                return res.status(200).json({ items: row });
-            } 
-            return res.status(404).json({ error: "notfound" });
+    const sql = "SELECT title FROM pages";
+    
+    db.all(sql, (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        } else if (rows.length === 0) {
+            return res.status(204).json({ message: "no data to be found"});
         }
-    )
+        res.json({
+            status: 200,
+            message: "success",
+            data: rows
+        });
+    });
 });
-
 
 module.exports = router;
