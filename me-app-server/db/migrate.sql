@@ -1,23 +1,35 @@
-CREATE TABLE IF NOT EXISTS users (
-    username VARCHAR(255) NOT NULL,
-    email VARCHAR(60) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    birthdate VARCHAR(255) NOT NULL,
+CREATE TABLE
+IF NOT EXISTS users
+(
+    username VARCHAR
+(255) NOT NULL,
+    email VARCHAR
+(60) NOT NULL,
+    password VARCHAR
+(255) NOT NULL,
+    birthdate VARCHAR
+(255) NOT NULL,
 
-    UNIQUE(username)
+    UNIQUE
+(username)
 );
 
-CREATE TABLE IF NOT EXISTS pages (
-    title VARCHAR(25) NOT NULL,
-    content VARCHAR(1000) NOT NULL,
+CREATE TABLE
+IF NOT EXISTS pages
+(
+    title VARCHAR
+(25) NOT NULL,
+    content VARCHAR
+(1000) NOT NULL,
 
-    UNIQUE(title)
+    UNIQUE
+(title)
 );
 
-INSERT INTO pages (title, content) 
-VALUES 
-    ("about", 
-    "Det är jag som är Patrik Karlsson, en 33 årig kille från Flen i Södermanland. Var väldigt idrottintresserad som yngre, utövade både innebandy,
+INSERT INTO pages
+    (title, content)
+VALUES
+    ("about", "Det är jag som är Patrik Karlsson, en 33 årig kille från Flen i Södermanland. Var väldigt idrottintresserad som yngre, utövade både innebandy,
 fotboll och bordtennis. Slutade dock med lagsporter och satsade allt på bordtennisen. Uppnådde väl inga större prestationer men lyckades bli en utbildad steg 
 ett tränare och fick således träna en ungdomsgrupp ett par dagar i veckan. 
 
@@ -38,8 +50,7 @@ webbprogrammering på Blekinge Tekniska Högskola.");
 INSERT INTO pages
     (title, content)
 VALUES
-    ("kmom01",
-        "# Me-Application
+    ("kmom01", "# Me-Application
 #####  Description
 Me-application based on React.js for JsRamverk course - dbwebb
 
@@ -57,8 +68,7 @@ Me-application based on React.js for JsRamverk course - dbwebb
 INSERT INTO pages
     (title, content)
 VALUES
-    ("kmom02",
-        "![Inspiration date picker](https://cdn.dribbble.com/users/2297683/screenshots/5928095/daily_ui_080.png)
+    ("kmom02", "![Inspiration date picker](https://cdn.dribbble.com/users/2297683/screenshots/5928095/daily_ui_080.png)
 After looking for inspirations for date pickers on dribble, I found one that got my interest. I managed to make my own date  picker almost like the one from dribble but
 with some differences in design. 
 
@@ -74,4 +84,4 @@ INSERT INTO pages
     (title, content)
 VALUES
     ("kmom03",
-        "Content here...");
+        "No content currently for this kmom...");
