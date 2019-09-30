@@ -45,7 +45,7 @@ router.post("/register", (req, res) => {
 });
 
 router.get("/", (req, res, next) => {
-  db.get("SELECT content FROM pages WHERE title = ?", "about", (err, row) => {
+  db.get("SELECT content FROM pages WHERE title = ?", "About", (err, row) => {
     if (!err) {
       return res.status(200).json({ ...row }.content);
     }
