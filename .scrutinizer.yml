@@ -1,3 +1,6 @@
+filter:
+  excluded_paths: ["test/*", ".nyc_output/", "coverage"]
+
 build:
   nodes:
     coverage:
