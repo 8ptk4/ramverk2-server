@@ -50,7 +50,12 @@ webbprogrammering på Blekinge Tekniska Högskola.");
 INSERT INTO pages
     (title, content)
 VALUES
-    ("Kmom01", "# Me-Application
+    ("Kmom01", "
+<p class='badges' markdown='1'>
+[![Build Status](https://travis-ci.org/8ptk4/ramverk2.svg?branch=master)](https://travis-ci.org/8ptk4/ramverk2)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/8ptk4/ramverk2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/8ptk4/ramverk2/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/8ptk4/ramverk2/badges/build.png?b=master)](https://scrutinizer-ci.com/g/8ptk4/ramverk2/build-status/master)
+</p>
 #####  Description
 Me-application based on React.js for JsRamverk course - dbwebb
 
@@ -68,7 +73,10 @@ Me-application based on React.js for JsRamverk course - dbwebb
 INSERT INTO pages
     (title, content)
 VALUES
-    ("Kmom02", "![Inspiration date picker](https://cdn.dribbble.com/users/2297683/screenshots/5928095/daily_ui_080.png)
+    ("Kmom02", "
+<p class='image_big' markdown='1'>
+![Inspiration date picker](https://cdn.dribbble.com/users/2297683/screenshots/5928095/daily_ui_080.png)
+</p>
 After looking for inspirations for date pickers on dribble, I found one that got my interest. I managed to make my own date  picker almost like the one from dribble but
 with some differences in design. 
 
@@ -89,5 +97,23 @@ VALUES
 INSERT INTO pages
     (title, content)
 VALUES
-    ("Kmom04",
-        "Describe 3 simple use-cases...");
+    ("Kmom04", "
+> ### 1 
+> Register route should properly display the correct h1 heading. In this case Register.
+
+<!-- -->
+> ### 2 
+> The Me Application should have a title equal to Me Application.
+
+<!-- -->
+> ### 3 
+> Register route should have an url ending equal to /register.
+
+<!-- -->
+> ### 4 
+> At the register route, clicking on submit without any values in the form fields should display correct error values.
+
+<!-- -->
+> ### 5 
+> The submit button should have a correct display text equal to Submit.
+");
