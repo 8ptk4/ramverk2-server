@@ -85,3 +85,9 @@ INSERT INTO pages
 VALUES
     ("kmom03",
         "No content currently for this kmom...");
+
+INSERT INTO pages
+    (title, content)
+VALUES
+    ("kmom04",
+        "Describe 3 simple use-cases...");
