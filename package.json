@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon app.js",
     "production": "NODE_ENV='production' nodemon app.js",
-    "test": "nyc --reporter=html --reporter=text mocha 'test/reports/**/*.js' --exit"
+    "test": "nyc --reporter=html --reporter=text --reporter=clover mocha 'test/reports/**/*.js' --timeout 10000"
   },
   "author": "",
   "license": "ISC",
