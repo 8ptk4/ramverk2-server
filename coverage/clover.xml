@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1569853708916" clover="3.2.0">
-  <project timestamp="1569853708916" name="All files">
+<coverage generated="1569864354635" clover="3.2.0">
+  <project timestamp="1569864354635" name="All files">
     <metrics statements="91" coveredstatements="76" conditionals="32" coveredconditionals="18" methods="21" coveredmethods="19" elements="144" coveredelements="113" complexity="0" loc="91" ncloc="91" packages="3" files="3" classes="3"/>
     <package name="ramverk2-server">
       <metrics statements="23" coveredstatements="16" conditionals="6" coveredconditionals="1" methods="3" coveredmethods="1"/>
